@@ -1,0 +1,85 @@
+﻿@model Karn.Modals.Calculation;
+ 
+<form asp-controller="Home" asp-action="CalculationAdd">
+	<div class="row">
+		<div class="card">
+			<div class="card-header">
+				<h3>Add Items</h3>
+			</div>
+
+			<div class="card-body">
+				<div class="form-group row align-items-center">
+					<label class="col-sm-2 col-form-label" for="SalaryIncome">Salary Income</label>
+					<div class="col-sm-6">
+						<input type="number" class="form-control" name="SalaryIncome" asp-for="SalaryIncome" id="SalaryIncome" />
+					</div>
+					<div class="col-sm-4">
+						<span asp-validation-for="SalaryIncome" class="text-danger"></span>
+					</div>
+				</div>
+
+				<div class="form-group row align-items-center">
+					<label class="col-sm-2 col-form-label" for="OtherSourceIncome">Other Source Income</label>
+					<div class="col-sm-6">
+						<input type="number" class="form-control" name="OtherSourceIncome" asp-for="OtherSourceIncome" id="OtherSourceIncome" />
+					</div>
+					<div class="col-sm-4">
+						<span asp-validation-for="OtherSourceIncome" class="text-danger"></span>
+					</div>
+				</div>
+
+				<div class="form-group row align-items-center">
+					<label class="col-sm-2 col-form-label" for="TotalIncome">Total Income</label>
+					<div class="col-sm-6">
+						<input type="number" class="form-control" name="TotalIncome" asp-for="TotalIncome" id="TotalIncome" readonly />
+					</div>
+				</div>
+
+				<div class="form-group row align-items-center">
+					<label class="col-sm-2 col-form-label" for="Deduction">Deduction</label>
+					<div class="col-sm-6">
+						<input type="number" class="form-control" name="Deduction" asp-for="Deduction" id="Deduction" />
+					</div> 
+				</div>
+
+				<div class="form-group row align-items-center">
+					<label class="col-sm-2 col-form-label" for="NetTaxableIncome">Net Taxable Income</label>
+					<div class="col-sm-6">
+						<input type="number" class="form-control" name="NetTaxableIncome" asp-for="NetTaxableIncome" id="NetTaxableIncome" readonly />
+					</div>
+				</div>
+
+				<button type="submit" class="btn btn-primary">Save</button>
+			</div>
+		</div>
+	</div>
+</form>
+
+
+
+@Html.ActionLink("Goto Calculation List", "CalculationIndex")
+
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+	<script>
+
+		document.getElementById("SalaryIncome").addEventListener("input", calculateIncome);
+		document.getElementById("OtherSourceIncome").addEventListener("input", calculateIncome);
+		document.getElementById("Deduction").addEventListener("input", calculatededuction);
+		 
+		function calculateIncome() {
+			const salaryIncome = parseFloat(document.getElementById("SalaryIncome").value) || 0;
+			const otherSourceIncome = parseFloat(document.getElementById("OtherSourceIncome").value) || 0;
+			const totalIncome = salaryIncome + otherSourceIncome;
+			document.getElementById("TotalIncome").value = totalIncome; 
+		}
+		  
+		function calculatededuction() {
+			const totalIncome = parseFloat(document.getElementById("TotalIncome").value) || 0;
+			const deduction = parseFloat(document.getElementById("Deduction").value) || 0;
+			const netTaxableIncome = deduction > 150000 ? totalIncome - 150000 : totalIncome - deduction;
+			document.getElementById("NetTaxableIncome").value = netTaxableIncome;
+		}
+	</script>
+}

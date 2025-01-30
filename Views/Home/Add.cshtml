@@ -1,0 +1,125 @@
+﻿@model Karn.Modals.BasicDataTable;
+
+<form asp-controller="Home" asp-action="Add">
+    <div class="row">
+        <div class="card">
+            <div class="card-header">
+                <h3>Add Items</h3>
+            </div>
+
+            <div class="card-body"> 
+                <div class="form-group row align-items-center">
+                    <label class="col-sm-2 col-form-label" for="NameOfPerson">Name Of Person</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" asp-for="NameOfPerson" id="NameOfPerson" />
+                    </div>
+                    <div class="col-sm-4">
+                        <span asp-validation-for="NameOfPerson" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row align-items-center">
+                    <label class="col-sm-2 col-form-label" for="SuperSeniorCitizen">Super Senior Citizen</label>
+                    <div class="col-sm-6">
+                        <select class="form-control" name="SuperSeniorCitizen" asp-for="SuperSeniorCitizen" id="SuperSeniorCitizen">
+                            <option value="">Select</option>
+                            <option value="YES">YES</option>
+                            <option value="NO">NO</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <span asp-validation-for="SuperSeniorCitizen" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row align-items-center">
+                    <label class="col-sm-2 col-form-label" for="DOB">Date of Birth</label>
+                    <div class="col-sm-6">
+                        <input type="date" class="form-control" name="DOB" asp-for="DOB" id="DOB" />
+                    </div>
+                    <div class="col-sm-4">
+                        <span asp-validation-for="DOB" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row align-items-center">
+                    <label class="col-sm-2 col-form-label" for="NetTaxableIncome">Net Taxable Income</label>
+                    <div class="col-sm-6">
+                        <input type="number" class="form-control" name="NetTaxableIncome" asp-for="NetTaxableIncome" id="NetTaxableIncome" />
+                    </div>
+                    <div class="col-sm-4">
+                        <span asp-validation-for="NetTaxableIncome" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row align-items-center">
+                    <label class="col-sm-2 col-form-label" for="BasicTaxPayable">Basic Tax Payable</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="BasicTaxPayable" asp-for="BasicTaxPayable" id="BasicTaxPayable" readonly />
+                        <input type="hidden" name="BasicTaxPayable" asp-for="BasicTaxPayable" id="HiddenBasicTaxPayable" />
+                    </div>
+                    <div class="col-sm-4">
+                        <span asp-validation-for="BasicTaxPayable" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+
+                <div class="form-group row">
+                    <div class="col-sm-8 offset-sm-2">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@Html.ActionLink("Goto List", "Index", null, new { @class = "btn btn-secondary mt-3" })
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+<script>
+    document.getElementById("NetTaxableIncome").addEventListener("input", calculateTax);
+    document.getElementById("SuperSeniorCitizen").addEventListener("change", calculateTax);
+
+    function calculateTax() {
+        var income = parseFloat(document.getElementById("NetTaxableIncome").value) || 0;
+        var isSuperSenior = document.getElementById("SuperSeniorCitizen").value === "YES";
+        let taxPayable = 0;
+
+        if (income > 1000000) {
+            taxPayable += (income - 1000000) * 0.30;
+            income = 1000000;
+        }
+        if (income > 500000) {
+            taxPayable += (income - 500000) * (isSuperSenior ? 0.20 : 0.20);
+            income = 500000;
+        }
+        if (income > 250000) {
+            taxPayable += (income - 250000) * (isSuperSenior ? 0 : 0.05);
+        }
+         
+        var roundedTaxPayable = Math.round(taxPayable);  
+        var basicTaxField = document.getElementById("BasicTaxPayable");
+        basicTaxField.value = roundedTaxPayable; 
+        document.getElementById("HiddenBasicTaxPayable").value = roundedTaxPayable;
+    }
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () { 
+        var today = new Date().toISOString().split('T')[0];
+        var dobInput = document.getElementById('DOB');
+        dobInput.setAttribute('max', today);
+         
+        dobInput.addEventListener('change', function () {
+            if (this.value > today) {
+                alert('Please select a date in the past.');
+                this.value = '';
+            }
+        });
+    });
+</script>

@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Karn.Modals.BasicDataTable>;
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@Html.ActionLink("Add BasicData", "Add") 
+
+<table class="table table-bordered table-responsive">
+    <thead>
+        <tr>
+            <th>Name Of Person</th>
+            <th>Super Senior Citizen</th>
+            <th>DOB</th>
+            <th>Net Taxable Income</th>
+            <th>Basic Tax Payable</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.NameOfPerson</td>
+                <td>@item.SuperSeniorCitizen</td>
+                <td>@item.DOB</td>
+                <td>@item.NetTaxableIncome</td>
+                <td>@item.BasicTaxPayable</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Karn.Modals.CalculationDataTable>;
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@Html.ActionLink("Add Calculation", "CalculationAdd")
+<table class="table table-bordered table-responsive">
+    <thead>
+        <tr>
+            <th>Salary Income</th>
+            <th>Other Source Income</th>
+            <th>Deduction</th>
+            <th>Total Income</th>
+            <th>Net Taxable Income</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.SalaryIncome</td>
+                <td>@item.OtherSourceIncome</td>
+                <td>@item.Deduction</td>
+                <td>@item.TotalIncome</td>
+                <td>@item.NetTaxableIncome</td>
+            </tr>
+        }
+    </tbody>
+</table>
